@@ -21,17 +21,27 @@ If you build mobile apps that use deep links — custom schemes (`myapp://...`),
 
 ## Getting started
 
-Prerequisites: [Node.js](https://nodejs.org) (LTS) and the [Expo](https://docs.expo.dev/get-started/set-up-your-environment/) toolchain.
+Prerequisites: [Node.js](https://nodejs.org) (LTS) and the [Expo](https://docs.expo.dev/get-started/set-up-your-environment/) toolchain
+(Xcode for iOS, Android Studio for Android).
 
 ```bash
 npm install
-npm start        # start the Expo development server
 ```
 
-To test native link delivery (custom-scheme handling, cold start), Expo Go is not enough — use a development build:
+This project uses `expo-dev-client` plus custom native config, so **Expo Go
+cannot run it**. The first run must be a development build, which compiles and
+installs the app on your emulator / simulator / device:
 
 ```bash
 npx expo run:android   # or: npx expo run:ios
+```
+
+If you see `No development build ... is installed`, it means this step was
+skipped. Once the development build is installed, you can use the dev server
+for subsequent runs:
+
+```bash
+npm start        # start the Expo development server
 ```
 
 Then fire a link at the running (or killed) app:
