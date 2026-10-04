@@ -39,14 +39,21 @@ The Debugger tab shows `getInitialURL()` (cold start) and `url` events
 
 ## Testing outgoing links (Launcher tab)
 
-`Linking.canOpenURL()` behavior notes:
+The Launcher hands whatever URL you type straight to the OS via
+`Linking.openURL()` — no allow-list, any custom scheme (`vfss://`, `myapp://`,
+…) works.
 
-- iOS returns `false` for custom schemes unless the querying app lists them in
-  `LSApplicationQueriesSchemes`. `false` therefore means "unavailable *or*
-  unqueryable" — the Launcher says exactly that and offers no fake success.
+Why no `canOpenURL()` gate: on iOS `canOpenURL()` returns `false` (or throws)
+for any custom scheme not pre-declared in `LSApplicationQueriesSchemes`, which
+is static, build-time only, and capped (~50 entries) — so it can never cover
+user-typed schemes. The app still calls it as a best-effort hint, but ignores
+the result for the open decision:
+
 - `openURL()` resolving only means the OS accepted the request, not that the
   target app handled the link. The success copy says "Handed to the operating
   system" for this reason.
+- `openURL()` rejecting means no app on the device claims the link — install
+  the target app or check its native link configuration.
 
 ## What Jest covers (and does not)
 
